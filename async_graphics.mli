@@ -328,48 +328,6 @@ val on_keypress: ?start:unit Async.Std.Deferred.t ->
     It is guaranteed that if [stop] becomes determined, even during evaluation of [f],
     then [f] will not be called again for a subsequent mouse click. *)
 
-
-(** To specify events to wait for. *)
-
-
-external wait_next_event : event list -> status = "caml_gr_wait_event"
-(** Wait until one of the events specified in the given event list
-   occurs, and return the status of the mouse and keyboard at
-   that time. If [Poll] is given in the event list, return immediately
-   with the current status. If the mouse cursor is outside of the
-   graphics window, the [mouse_x] and [mouse_y] fields of the event are
-   outside the range [0..size_x()-1, 0..size_y()-1]. Keypresses
-   are queued, and dequeued one by one when the [Key_pressed]
-   event is specified. *)
-
-val loop_at_exit : event list -> (status -> unit) -> unit
-(** Loop before exiting the program, the list given as argument is the
-    list of handlers and the events on which these handlers are called.
-    To exit cleanly the loop, the handler should raise Exit. Any other
-    exception will be propagated outside of the loop.
-    @since 4.01
-*)
-
-(** {6 Mouse and keyboard polling} *)
-
-val mouse_pos : unit -> int * int
-(** Return the position of the mouse cursor, relative to the
-   graphics window. If the mouse cursor is outside of the graphics
-   window, [mouse_pos()] returns a point outside of the range
-   [0..size_x()-1, 0..size_y()-1]. *)
-
-val button_down : unit -> bool
-(** Return [true] if the mouse button is pressed, [false] otherwise. *)
-
-val read_key : unit -> char
-(** Wait for a key to be pressed, and return the corresponding
-   character. Keypresses are queued. *)
-
-val key_pressed : unit -> bool
-(** Return [true] if a keypress is available; that is, if [read_key]
-   would not block. *)
-
-
 (** {6 Sound} *)
 
 external sound : int -> int -> unit = "caml_gr_sound"
