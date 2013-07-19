@@ -1,0 +1,3 @@
+
+<*.mli>: package(graphics), package(async), thread
+<*.ml>: package(graphics), package(async), thread
