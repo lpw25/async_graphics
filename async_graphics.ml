@@ -20,12 +20,22 @@ include Graphics
 
 let event_reader = ref None
 
+let close_event_reader () =
+  match !event_reader with
+    None -> ()
+  | Some rd ->
+      event_reader := None;
+      Pipe.close_read rd
+
 let rec event_loop wr = 
-  let status = 
-    wait_next_event [Button_down; Button_up; Key_pressed; Mouse_motion] 
-  in
-    Thread_safe_pipe.write wr status;
-    if not (Thread_safe_pipe.is_closed wr) then event_loop wr
+  try
+    let status = 
+      wait_next_event [Button_down; Button_up; Key_pressed; Mouse_motion] 
+    in
+      Thread_safe_pipe.write wr status;
+      if not (Thread_safe_pipe.is_closed wr) then event_loop wr
+  with Graphic_failure _ -> close_event_reader ()
+    
 
 let create_event_reader () = 
   match !event_reader with
@@ -39,13 +49,6 @@ let create_event_reader () =
                      fill rd;
                      event_loop wr) ());
         rd_d
-
-let close_event_reader () =
-  match !event_reader with
-    None -> ()
-  | Some rd ->
-      Pipe.close_read rd;
-      event_reader := None
 
 (* Event handlers *)
 
@@ -115,16 +118,18 @@ let event_handling_started = ref false
 let start_event_handling () =
   if not !event_handling_started then begin
     event_handling_started := true;
-    Deferred.don't_wait_for 
-      (create_event_reader () >>= fun event_reader ->
+    let rec handle_events () =
+      create_event_reader () >>> fun event_reader ->
         let rec loop () = 
-          (Pipe.read event_reader) >>= function 
-             `Eof -> Deferred.return ()
+          (Pipe.read event_reader) >>> function 
+             `Eof -> handle_events ()
            | `Ok status ->
                handle_event status;
                loop ()
         in
-          loop ())
+          loop ()
+    in
+      handle_events ()
   end
 
 let on_click ?(start = Deferred.unit) ?(stop = Deferred.never ()) f = 
