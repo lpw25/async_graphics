@@ -16,6 +16,8 @@
 
 (** Machine-independent graphics primitives compatible with Async. *)
 
+open Async.Std
+
 exception Graphic_failure of string
 (** Raised by the functions below when they encounter an error. *)
 
@@ -285,8 +287,8 @@ type status =
     key : char;                 (** the character for the key pressed *)
   }
 
-val on_click: ?start:unit Async.Std.Deferred.t -> 
-              ?stop:unit Async.Std.Deferred.t -> 
+val on_click: ?start:unit Deferred.t -> 
+              ?stop:unit Deferred.t -> 
               (status -> unit) -> unit
 (** [on_click ?start ?stop f] runs [f] for every mouse click event starting when
     [start] becomes determined and stopping when [stop] becomes determined.
@@ -294,8 +296,8 @@ val on_click: ?start:unit Async.Std.Deferred.t ->
     It is guaranteed that if [stop] becomes determined, even during evaluation of [f],
     then [f] will not be called again for a subsequent mouse click. *)
 
-val on_mousedown: ?start:unit Async.Std.Deferred.t -> 
-                  ?stop:unit Async.Std.Deferred.t -> 
+val on_mousedown: ?start:unit Deferred.t -> 
+                  ?stop:unit Deferred.t -> 
                   (status -> unit) -> unit
 (** [on_mousedown ?start ?stop f] runs [f] for every mouse down event starting when
     [start] becomes determined and stopping when [stop] becomes determined.
@@ -303,8 +305,8 @@ val on_mousedown: ?start:unit Async.Std.Deferred.t ->
     It is guaranteed that if [stop] becomes determined, even during evaluation of [f],
     then [f] will not be called again for a subsequent mouse click. *)
 
-val on_mouseup: ?start:unit Async.Std.Deferred.t -> 
-                ?stop:unit Async.Std.Deferred.t -> 
+val on_mouseup: ?start:unit Deferred.t -> 
+                ?stop:unit Deferred.t -> 
                 (status -> unit) -> unit
 (** [on_mouseup ?start ?stop f] runs [f] for every mouse up event starting when
     [start] becomes determined and stopping when [stop] becomes determined.
@@ -312,8 +314,8 @@ val on_mouseup: ?start:unit Async.Std.Deferred.t ->
     It is guaranteed that if [stop] becomes determined, even during evaluation of [f],
     then [f] will not be called again for a subsequent mouse click. *)
 
-val on_mousemove: ?start:unit Async.Std.Deferred.t -> 
-                  ?stop:unit Async.Std.Deferred.t -> 
+val on_mousemove: ?start:unit Deferred.t -> 
+                  ?stop:unit Deferred.t -> 
                   (status -> unit) -> unit
 (** [on_mousemove ?start ?stop f] runs [f] for every mouse move event starting when
     [start] becomes determined and stopping when [stop] becomes determined.
@@ -321,8 +323,8 @@ val on_mousemove: ?start:unit Async.Std.Deferred.t ->
     It is guaranteed that if [stop] becomes determined, even during evaluation of [f],
     then [f] will not be called again for a subsequent mouse click. *)
 
-val on_keypress: ?start:unit Async.Std.Deferred.t -> 
-                 ?stop:unit Async.Std.Deferred.t -> 
+val on_keypress: ?start:unit Deferred.t -> 
+                 ?stop:unit Deferred.t -> 
                  (status -> unit) -> unit
 (** [on_keypress ?start ?stop f] runs [f] for every key press event starting when
     [start] becomes determined and stopping when [stop] becomes determined.
