@@ -11,8 +11,10 @@
 (*                                                                     *)
 (***********************************************************************)
 
-open Core.Std
-open Async.Std
+open Core
+open Async
+open Async.Thread_safe_pipe.Written_or_closed
+open Async.Thread_safe_pipe.If_closed
 
 include Graphics
 
@@ -32,8 +34,9 @@ let rec event_loop wr =
     let status = 
       wait_next_event [Button_down; Button_up; Key_pressed; Mouse_motion] 
     in
-      Thread_safe_pipe.write wr status;
-      if not (Thread_safe_pipe.is_closed wr) then event_loop wr
+      match Thread_safe_pipe.write wr status ~if_closed:Return with
+      | Written -> event_loop wr
+      | Closed -> ()
   with Graphic_failure _ -> close_event_reader ()
     
 

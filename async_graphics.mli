@@ -16,7 +16,7 @@
 
 (** Machine-independent graphics primitives compatible with Async. *)
 
-open Async.Std
+open Async
 
 exception Graphic_failure of string
 (** Raised by the functions below when they encounter an error. *)
