@@ -5,6 +5,7 @@ homepage: "https://github.com/lpw25/async_graphics"
 bug-reports: "https://github.com/lpw25/async_graphics/issues"
 dev-repo: "https://github.com/lpw25/async_graphics.git"
 license: "LGPL-2.0 with OCaml linking exception"
+version: "0.6.0"
 tags: [
   "async"
   "graphics"
