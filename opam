@@ -14,7 +14,7 @@ remove: [["ocamlfind" "remove" "async_graphics"]]
 depends: [
   "ocamlfind"
   "graphics"
-  "async" {>= "113.00.00"}
+  "async" {>= "v0.9"}
   "ocamlbuild" {build}
 ]
 install: "./install.sh"
