@@ -12,7 +12,7 @@ tags: [
 ]
 remove: [["ocamlfind" "remove" "async_graphics"]]
 depends: [
-  "ocamlfind"
+  "ocamlfind" {build}
   "graphics"
   "async" {>= "v0.9"}
   "ocamlbuild" {build}
