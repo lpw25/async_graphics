@@ -1,5 +1,0 @@
-version = "0.6.0"
-description = "Async wrapper for OCaml Graphics library"
-requires = "graphics, async"
-archive(byte) = "async_graphics.cma"
-archive(native) = "async_graphics.cmxa"

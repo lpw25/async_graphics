@@ -13,8 +13,8 @@
 
 open Core
 open Async
-open Async.Thread_safe_pipe.Written_or_closed
-open Async.Thread_safe_pipe.If_closed
+open Thread_safe_pipe.Written_or_closed
+open Thread_safe_pipe.If_closed
 
 include Graphics
 
@@ -101,7 +101,7 @@ let handle_event status =
     if prev.button && (not status.button) then begin
       run_handlers mouseup_handlers status;
       match !click_status with
-         Some {mouse_x; mouse_y} ->  
+         Some {mouse_x; mouse_y; _} ->  
            if status.mouse_x = mouse_x && status.mouse_y = mouse_y then
              run_handlers click_handlers status
            else
